@@ -56,9 +56,13 @@ produce the [pkg](https://github.com/zeit/pkg) binaries.
 
 ## Setup
 
-Configuration of one or more providers via `login` command is necessary. If no logins are active and `now`
+Configuration of one or more providers via `login` command is necessary.
 
-Global configuration is stored as `~/.now/config.json`. Your default provider will be the first one you log in to.
+Global configuration is stored as `~/.now/config.json`. Your default provider will be the first one you log in to. If you are logged into multiple providers and want to set default provider:
+
+```
+now config set defaultProvider gcp
+```
 
 ### Now.sh
 

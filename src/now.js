@@ -245,6 +245,31 @@ const main = async argv_ => {
     )
   }
 
+  // the context object to supply to the providers or the commands
+  const ctx = {
+    config,
+    authConfig,
+    argv: argv_
+  }
+
+  if (targetOrSubcommand === 'config') {
+    const _config = require('./config')
+    const subcommand = _config.subcommands.has(argv._[3]) ? argv._[3] : 'help'
+
+    debug(`executing config %s`, subcommand)
+
+    try {
+      return _config[subcommand](ctx)
+    } catch (err) {
+      console.error(
+        error(
+          `An unexpected error occurred in config ${subcommand}: ${err.stack}`
+        )
+      )
+      return 1
+    }
+  }
+
   let suppliedProvider = null
 
   // if the target is something like `aws`
@@ -303,13 +328,6 @@ const main = async argv_ => {
 
   const provider: Object = providers[suppliedProvider || defaultProvider]
 
-  // the context object to supply to the providers
-  const ctx = {
-    config,
-    authConfig,
-    argv: argv_
-  }
-
   let subcommand
 
   // we check if we are deploying something
@@ -364,6 +382,7 @@ const main = async argv_ => {
         `An unexpected error occurred in provider ${subcommand}: ${err.stack}`
       )
     )
+    return 1
   }
 }
 
@@ -380,7 +399,7 @@ const handleRejection = err => {
   } else {
     console.error(error('An unexpected empty rejection occurred'))
   }
-  process.exit(1);
+  process.exit(1)
 }
 
 const handleUnexpected = err => {
@@ -388,7 +407,7 @@ const handleUnexpected = err => {
   console.error(
     error(`An unexpected error occurred!\n  ${err.stack} ${err.stack}`)
   )
-  process.exit(1);
+  process.exit(1)
 }
 
 process.on('unhandledRejection', handleRejection)
